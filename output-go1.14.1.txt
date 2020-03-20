@@ -1,0 +1,98 @@
+$ make all
+go version go1.14.1 darwin/amd64
+go test -v
+=== RUN   Test1
+=== PAUSE Test1
+=== RUN   Test2
+=== PAUSE Test2
+=== CONT  Test1
+=== CONT  Test2
+=== RUN   Test1/this_passes
+=== PAUSE Test1/this_passes
+=== RUN   Test2/this_passes
+=== RUN   Test1/this_will_fail
+=== PAUSE Test1/this_will_fail
+=== CONT  Test1/this_passes
+=== PAUSE Test2/this_passes
+=== RUN   Test2/this_will_fail
+=== PAUSE Test2/this_will_fail
+=== CONT  Test2/this_passes
+=== CONT  Test1/this_will_fail
+=== CONT  Test2/this_will_fail
+    Test1/this_will_fail: parallel_test.go:40:
+        got:  [THIS WILL FAIL]
+        want: [because this is wrong]
+    Test2/this_will_fail: parallel_test.go:40:
+        got:  [THIS WILL FAIL]
+        want: [because this is wrong]
+--- FAIL: Test1 (0.00s)
+    --- PASS: Test1/this_passes (0.00s)
+    --- FAIL: Test1/this_will_fail (0.00s)
+--- FAIL: Test2 (0.00s)
+    --- PASS: Test2/this_passes (0.00s)
+    --- FAIL: Test2/this_will_fail (0.00s)
+FAIL
+exit status 1
+FAIL	parallel	0.138s
+make: [test] Error 1 (ignored)
+
+
+go test -c -o ./parallel
+go tool test2json -t ./parallel -test.v
+{"Time":"2020-03-20T14:26:38.573517-06:00","Action":"run","Test":"Test1"}
+{"Time":"2020-03-20T14:26:38.574436-06:00","Action":"output","Test":"Test1","Output":"=== RUN   Test1\n"}
+{"Time":"2020-03-20T14:26:38.574458-06:00","Action":"output","Test":"Test1","Output":"=== PAUSE Test1\n"}
+{"Time":"2020-03-20T14:26:38.574461-06:00","Action":"pause","Test":"Test1"}
+{"Time":"2020-03-20T14:26:38.574464-06:00","Action":"run","Test":"Test2"}
+{"Time":"2020-03-20T14:26:38.574466-06:00","Action":"output","Test":"Test2","Output":"=== RUN   Test2\n"}
+{"Time":"2020-03-20T14:26:38.574471-06:00","Action":"output","Test":"Test2","Output":"=== PAUSE Test2\n"}
+{"Time":"2020-03-20T14:26:38.574474-06:00","Action":"pause","Test":"Test2"}
+{"Time":"2020-03-20T14:26:38.574476-06:00","Action":"cont","Test":"Test1"}
+{"Time":"2020-03-20T14:26:38.574478-06:00","Action":"output","Test":"Test1","Output":"=== CONT  Test1\n"}
+{"Time":"2020-03-20T14:26:38.574481-06:00","Action":"cont","Test":"Test2"}
+{"Time":"2020-03-20T14:26:38.574483-06:00","Action":"output","Test":"Test2","Output":"=== CONT  Test2\n"}
+{"Time":"2020-03-20T14:26:38.574487-06:00","Action":"run","Test":"Test1/this_passes"}
+{"Time":"2020-03-20T14:26:38.574491-06:00","Action":"output","Test":"Test1/this_passes","Output":"=== RUN   Test1/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.574493-06:00","Action":"run","Test":"Test2/this_passes"}
+{"Time":"2020-03-20T14:26:38.574495-06:00","Action":"output","Test":"Test2/this_passes","Output":"=== RUN   Test2/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.574498-06:00","Action":"output","Test":"Test1/this_passes","Output":"=== PAUSE Test1/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.5745-06:00","Action":"pause","Test":"Test1/this_passes"}
+{"Time":"2020-03-20T14:26:38.574503-06:00","Action":"run","Test":"Test1/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574505-06:00","Action":"output","Test":"Test1/this_will_fail","Output":"=== RUN   Test1/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.574507-06:00","Action":"output","Test":"Test2/this_passes","Output":"=== PAUSE Test2/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.57451-06:00","Action":"pause","Test":"Test2/this_passes"}
+{"Time":"2020-03-20T14:26:38.574596-06:00","Action":"output","Test":"Test1/this_will_fail","Output":"=== PAUSE Test1/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.5746-06:00","Action":"pause","Test":"Test1/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574602-06:00","Action":"cont","Test":"Test1/this_passes"}
+{"Time":"2020-03-20T14:26:38.574604-06:00","Action":"output","Test":"Test1/this_passes","Output":"=== CONT  Test1/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.574607-06:00","Action":"cont","Test":"Test1/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574609-06:00","Action":"output","Test":"Test1/this_will_fail","Output":"=== CONT  Test1/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.574611-06:00","Action":"run","Test":"Test2/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574614-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"=== RUN   Test2/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.574616-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"=== PAUSE Test2/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.574619-06:00","Action":"pause","Test":"Test2/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574622-06:00","Action":"cont","Test":"Test2/this_passes"}
+{"Time":"2020-03-20T14:26:38.574624-06:00","Action":"output","Test":"Test2/this_passes","Output":"=== CONT  Test2/this_passes\n"}
+{"Time":"2020-03-20T14:26:38.574627-06:00","Action":"output","Test":"Test2/this_passes","Output":"    Test1/this_will_fail: parallel_test.go:40: \n"}
+{"Time":"2020-03-20T14:26:38.574638-06:00","Action":"output","Test":"Test2/this_passes","Output":"        got:  [THIS WILL FAIL]\n"}
+{"Time":"2020-03-20T14:26:38.57464-06:00","Action":"output","Test":"Test2/this_passes","Output":"        want: [because this is wrong]\n"}
+{"Time":"2020-03-20T14:26:38.574668-06:00","Action":"output","Test":"Test1","Output":"--- FAIL: Test1 (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.574675-06:00","Action":"output","Test":"Test1/this_passes","Output":"    --- PASS: Test1/this_passes (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.574678-06:00","Action":"pass","Test":"Test1/this_passes","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574727-06:00","Action":"output","Test":"Test1/this_will_fail","Output":"    --- FAIL: Test1/this_will_fail (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.57473-06:00","Action":"fail","Test":"Test1/this_will_fail","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574732-06:00","Action":"fail","Test":"Test1","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574735-06:00","Action":"cont","Test":"Test2/this_will_fail"}
+{"Time":"2020-03-20T14:26:38.574737-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"=== CONT  Test2/this_will_fail\n"}
+{"Time":"2020-03-20T14:26:38.574739-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"    Test2/this_will_fail: parallel_test.go:40: \n"}
+{"Time":"2020-03-20T14:26:38.574742-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"        got:  [THIS WILL FAIL]\n"}
+{"Time":"2020-03-20T14:26:38.574744-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"        want: [because this is wrong]\n"}
+{"Time":"2020-03-20T14:26:38.574747-06:00","Action":"output","Test":"Test2","Output":"--- FAIL: Test2 (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.574752-06:00","Action":"output","Test":"Test2/this_passes","Output":"    --- PASS: Test2/this_passes (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.574774-06:00","Action":"pass","Test":"Test2/this_passes","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574777-06:00","Action":"output","Test":"Test2/this_will_fail","Output":"    --- FAIL: Test2/this_will_fail (0.00s)\n"}
+{"Time":"2020-03-20T14:26:38.57478-06:00","Action":"fail","Test":"Test2/this_will_fail","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574782-06:00","Action":"fail","Test":"Test2","Elapsed":0}
+{"Time":"2020-03-20T14:26:38.574784-06:00","Action":"output","Output":"FAIL\n"}
+{"Time":"2020-03-20T14:26:38.574813-06:00","Action":"fail","Elapsed":0.17}
+make: *** [testJSON] Error 1
