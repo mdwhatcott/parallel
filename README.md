@@ -2,7 +2,7 @@
 
 This package runs tests and sub-tests **both in parallel**. The purpose of
 this is to illustrate a bug in the output of `go test -json` (and also
-`go tool test2json`) using Go 1.14 and Go 1.14.1. See lines 77-78 of 
+`go tool test2json`) using Go 1.14 and Go 1.14.1. See lines 86-87 of 
 "output-go1.14.1.txt" for evidence of this. 
 
 At SmartyStreets we have built [our own testing library](https://github.com/smartystreets/gunit)

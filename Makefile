@@ -7,7 +7,7 @@ compile: version
 	-go test -c -o ./parallel
 
 testJSON: compile
-	go tool test2json -t ./parallel -test.v
+	go test -json
 
 version:
 	@go version
