@@ -3,17 +3,19 @@
 test: version
 	-go test -v
 
-compile: version
-	-go test -c -o ./parallel
+test2JSONCleanup: test2JSON
+	rm ./parallel
 
-testJSON: compile
-	go test -json
+test2JSON: version compileTest
+	-go tool test2json -t ./parallel -test.v
+
+compileTest:
+	go test -c -o ./parallel
+
+testJSON:
+	-go test -json
 
 version:
 	@go version
 
-separator:
-	@echo
-	@echo
-
-all: test separator testJSON
+all: test testJSON test2JSONCleanup
